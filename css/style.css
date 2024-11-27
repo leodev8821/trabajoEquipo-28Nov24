@@ -1,0 +1,16 @@
+.divButton{
+    display: flex;
+    flex-direction: row;
+    gap: 2em;
+}
+
+.oculto{
+    visibility: hidden;
+    position: absolute;
+}
+
+.visible{
+    visibility: visible;
+    position: absolute;
+
+}
