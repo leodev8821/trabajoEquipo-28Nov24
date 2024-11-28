@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
 import { getFirestore, collection, getDocs, doc, setDoc, deleteDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
-import { taskCard, createTask } from "./functions.js"
+import { taskCard, createTask,navigateToHome } from "./functions.js"
 
 
 // Your web app's Firebase configuration
@@ -19,13 +19,17 @@ export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 
 export async function getTasks() {
-    
     const querySnapshot = await getDocs(collection(db, "tasks"));
-    let id = querySnapshot.docs[0].id;
-    createTask("Add Task", "mainCont", id, "insert");
-    querySnapshot.forEach((doc) => {
-        taskCard(doc.id, doc.data());
-    });
+    if(querySnapshot.docs.length != 0){
+        let id = querySnapshot.docs[0].id;
+        createTask("Add Task", "mainCont", id, "insert");
+        querySnapshot.forEach((doc) => {
+            taskCard(doc.id, doc.data());
+        });
+    }else{
+        alert("No tienes tareas")
+        createTask("Add Task", "mainCont", "idPrueba", "insert");
+    }
 }
 
 function generateRandomIdTask(num) {
@@ -48,9 +52,9 @@ await setDoc(doc(db, "cities", "LA"), {
 */
 
 export async function insertTask(task) {
-    alert(JSON.stringify(task));
-    await setDoc(doc(db, "tasks", generateRandomIdTask(20), task));
+    await setDoc(doc(db, "tasks", generateRandomIdTask(20)), task);
     alert("Insertada la tarea: " + task.title);
+    navigateToHome("index")
 }
 
 export async function deleteTask(id) {
@@ -59,12 +63,11 @@ export async function deleteTask(id) {
 }
 
 export async function updateTask(task) {            // Creada función para update de tasks.
-    alert(task.id)
     const taskToUpdate = await doc(db, "tasks", task.id);
-    alert(taskToUpdate.title)
     await updateDoc(taskToUpdate, {
         title: task.title,
         description: task.description
     });
     alert("Editada la tarea: " + task.id);
+    navigateToHome("index")
 }

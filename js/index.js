@@ -4,8 +4,6 @@ import { showEdit, eraseTask, setVisibility, readForms } from "./functions.js"
 //console.log(db);
 //Extraigo todos los documentos de tasks y creo tarjetas con ellos
 
-insertTask({})
-
 await getTasks();
 
 window.showEdit = showEdit

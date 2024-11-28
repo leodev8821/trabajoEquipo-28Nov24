@@ -46,6 +46,7 @@ function taskCard(id, task) {
     principalDiv.setAttribute("class", "card bg-light mb-3");
     principalDiv.style = "max-width: 20rem;";
     principalDiv.setAttribute("name", id);
+    principalDiv.setAttribute("id", id);
 
     const headerDiv = document.createElement('div');
     const contentDiv = document.createTextNode("Id: " + id);
@@ -155,12 +156,26 @@ function createTask(action, container, id, form) {
     inputSubmit.value = action;
     inputSubmit.classList.add("btn", "btn-lg", "btn-primary");
     inputSubmit.id = "task-button";
-    inputSubmit.setAttribute(`onclick`, `readForms("${id}", "${form}")`)
+    //inputSubmit.setAttribute(`onclick`, `readForms("${id}", "${form}")`)
+    taskBodyForm.addEventListener("submit", async (e) => {
+        e.preventDefault(); // Previene la recarga de la página
+        await readForms(id, form);
+    });
     taskBodyForm.appendChild(inputSubmit);
 
     cardBlg.appendChild(taskBodyForm);
 
+   
+
 };
+
+/**
+ * Función para ir a la página de game.html desde el botón 'Finish'
+ * @param {string} url - Texto de la url al que se quiere ir
+ */
+function navigateToHome(url){
+    window.location.assign('/html/'+url+".html");
+}
 
 async function readForms(id, form) {
     //Obtenemos el form y capturamos el submit
@@ -203,4 +218,4 @@ function eraseTask(){
 
 
 
-export { taskCard, showEdit, createTask, eraseTask, setVisibility, readForms }
+export { taskCard, showEdit, createTask, eraseTask, setVisibility, readForms, navigateToHome }
