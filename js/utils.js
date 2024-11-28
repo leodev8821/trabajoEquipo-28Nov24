@@ -22,13 +22,13 @@ export async function getTasks() {
     const querySnapshot = await getDocs(collection(db, "tasks"));
     if(querySnapshot.docs.length != 0){
         let id = querySnapshot.docs[0].id;
-        createTask("Add Task", "mainCont", id, "insert");
+        createTask("Add-Task", "mainCont", id, "insert");
         querySnapshot.forEach((doc) => {
             taskCard(doc.id, doc.data());
         });
     }else{
         alert("No tienes tareas")
-        createTask("Add Task", "mainCont", "idPrueba", "insert");
+        createTask("Add-Task", "mainCont", "idPrueba", "insert");
     }
 }
 

@@ -1,23 +1,29 @@
 import { deleteTask, updateTask, insertTask } from "./utils.js";
 
-function showEdit(id) {
+function showEdit(id, title, description) {
     setVisibility("editMode");
-    
     let getForm = document.getElementById("editCont");
     getForm.innerHTML = "";
+    
     let closeButton = document.createElement("input");
     closeButton.type = "button";
     closeButton.setAttribute("onclick", "setVisibility('standardMode')");
     closeButton.value ="Volver";
     getForm.appendChild(closeButton);
 
-    createTask("Edit Task", "editCont", id, "update");
+    createTask("EditTask", "editCont", id, "update");
 
+    addValues(title, description)
+}
 
+function addValues(taskTitle, taskDescription){
+    let title = document.querySelector("#editCont #task-title");
+    let description = document.querySelector("#editCont #task-description");
+    title.value = taskTitle;
+    description.value = taskDescription;
 }
 
 function setVisibility(form){
-    // console.log("DEBUG --> Entro");
     let mainDiv = document.getElementById("mainCont");
     let editDiv = document.getElementById("editCont");
     switch(form){
@@ -40,6 +46,7 @@ function setVisibility(form){
  * @param {Object} task - Tarea que se quiere modificar
  */
 function taskCard(id, task) {
+
     let mainCont = document.getElementById('mainCont');
 
     const principalDiv = document.createElement('div');
@@ -77,14 +84,16 @@ function taskCard(id, task) {
     input.value = "Borrar Tarea";
     input.setAttribute("name", "delete");
     input.setAttribute("id", id);
-    input.setAttribute("onClick", "eraseTask()");
+    input.setAttribute("onClick", `eraseTask("${id}")`);
     divButton.appendChild(input);
 
     const editButton = document.createElement("input");
     editButton.type = "button";
     editButton.value = "Editar Tarea";
     editButton.setAttribute("name", "edit");
-    editButton.setAttribute("onclick", `showEdit('${id}')`);
+        //inputSubmit.setAttribute(`onclick`, `readForms("${id}", "${form}")`)
+
+    editButton.setAttribute("onclick", `showEdit('${id}', '${task.title}', '${task.description}')`);
     divButton.appendChild(editButton);
 
     principalDiv.appendChild(bodyDiv);
@@ -163,14 +172,12 @@ function createTask(action, container, id, form) {
     });
     taskBodyForm.appendChild(inputSubmit);
 
-    cardBlg.appendChild(taskBodyForm);
-
-   
+    cardBlg.appendChild(taskBodyForm);  
 
 };
 
 /**
- * Función para ir a la página de game.html desde el botón 'Finish'
+ * Función para ir a la página de que se le pase por parámetro desde el botón 'Finish'
  * @param {string} url - Texto de la url al que se quiere ir
  */
 function navigateToHome(url){
@@ -182,7 +189,7 @@ async function readForms(id, form) {
 
     switch (form) {
         case "update":
-            const updateForm = document.getElementById("Edit Task");
+            const updateForm = document.getElementById("EditTask");
             // e.preventDefault();
             const taskUpdate = {
                 id: id,
@@ -192,7 +199,7 @@ async function readForms(id, form) {
             await updateTask(taskUpdate);
             break;
         case "insert":
-            const form = document.getElementById("Add Task");
+            const form = document.getElementById("Add-Task");
             // e.preventDefault();
             const taskInsert = {
                 title: form["task-title"].value,
@@ -205,15 +212,11 @@ async function readForms(id, form) {
 
 }
 
-function eraseTask(){
-    const buttonsCardD = document.getElementsByName("delete");
-    const divConten = document.getElementById("mainCont");
-    buttonsCardD.forEach(element => {
-        var divDelete = element.parentNode.parentNode.parentNode;
-        divConten.removeChild(divDelete);
-        //console.log("Estoy borrando la tarea: "+element.id);
-        deleteTask(element.id);
-    })
+function eraseTask(id){
+    const divCardTask = document.getElementById(id);
+
+    divCardTask.remove();
+    deleteTask(id);
 }
 
 
