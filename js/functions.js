@@ -29,10 +29,10 @@ function setVisibility(form){
     switch(form){
         case "editMode":
             mainDiv.className = "oculto";
-            editDiv.className = "visible";
+            editDiv.className = "d-flex flex-column align-items-center w-100 h-100";
             break;
         case "standardMode":
-            mainDiv.className = "visible";
+            mainDiv.className = "d-flex flex-column align-items-center w-100 h-100";
             editDiv.className = "oculto";
             break;
         default:
@@ -46,8 +46,11 @@ function setVisibility(form){
  * @param {Object} task - Tarea que se quiere modificar
  */
 function taskCard(id, task) {
-
+    let currentTask = document.createElement("div");
     let mainCont = document.getElementById('mainCont');
+    currentTask.className = "d-flex flex-wrap mx-3 justify-content-center"
+    currentTask.id = "currentTask";
+    mainCont.appendChild(currentTask);
 
     const principalDiv = document.createElement('div');
     principalDiv.setAttribute("class", "card bg-light mb-3");
@@ -100,7 +103,7 @@ function taskCard(id, task) {
 
     bodyDiv.appendChild(divButton);
 
-    mainCont.appendChild(principalDiv)
+    currentTask.appendChild(principalDiv)
 
     const br = document.createElement("br");
 
